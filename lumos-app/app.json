@@ -1,0 +1,8 @@
+{
+    "expo": {
+        "name": "lumos-app",
+        "slug": "lumos",
+        "sdkVersion": "42.0.0",
+        "version": "1.0.0"
+    }
+}

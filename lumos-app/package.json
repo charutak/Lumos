@@ -1,0 +1,57 @@
+{
+    "dependencies": {
+        "@expo-google-fonts/dev": "^0.2.0",
+        "@expo-google-fonts/lobster": "^0.2.0",
+        "@types/jest": "^27.0.1",
+        "@types/react-test-renderer": "^17.0.1",
+        "expo": "~42.0.0",
+        "expo-app-loading": "^1.1.2",
+        "expo-font": "~9.2.1",
+        "jest": "^27.1.1",
+        "jest-expo": "^42.1.0",
+        "react": "16.13.1",
+        "react-dom": "16.13.1",
+        "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+        "react-native-web": "~0.13.12",
+        "react-test-renderer": "^17.0.2",
+        "ts-jest": "^27.0.5",
+        "tslint": "^6.1.3"
+    },
+    "devDependencies": {
+        "@babel/core": "~7.9.0",
+        "@types/react": "~16.9.35",
+        "@types/react-native": "~0.63.2",
+        "typescript": "~4.0.0"
+    },
+    "scripts": {
+        "start": "expo start",
+        "android": "expo start --android",
+        "ios": "expo start --ios",
+        "web": "expo start --web",
+        "eject": "expo eject"
+    },
+    "private": true,
+    "jest": {
+        "preset": "jest-expo",
+        "transform": {
+            "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+            "^.+\\.tsx?$": "ts-jest"
+        },
+        "testMatch": [
+            "**/__tests__/**/*.ts?(x)",
+            "**/?(*.)+(spec|test).ts?(x)"
+        ],
+        "moduleFileExtensions": [
+            "js",
+            "ts",
+            "tsx"
+        ],
+        "globals": {
+            "ts-jest": {
+                "tsConfig": {
+                    "jsx": "react"
+                }
+            }
+        }
+    }
+}
