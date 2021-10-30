@@ -23,7 +23,7 @@ export default class App extends React.Component {
         var that = this;
         setTimeout( function() {
             that.hideSplashScreen();
-        }, 2000);
+        }, 1000);
     }
 
     public render()
