@@ -25,23 +25,6 @@ export default class App extends React.Component {
 }
 
 
-/* export default function App() {
- *     let [fontsLoaded] = useFonts({
- *         'Lobster': require('../assets/fonts/Lobster-Regular.ttf'),
- *     });
- * 
- *     if (!fontsLoaded) {
- *         return <AppLoading />;
- *     } else {
- *         return (
- *             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
- *                 <Text style={{ fontFamily: 'Inter-Black', fontSize: 40 }}>Inter Black</Text>
- *                 <Text style={{ fontSize: 40 }}>Platform Default</Text>
- *             </View>
- *         );
- *     }
- * };
- *  */
 const styles = StyleSheet.create({
   container: {
       flex: 1,
@@ -51,7 +34,7 @@ const styles = StyleSheet.create({
   },
     title: {
         color: '#FF9900',
-        fontFamily: 'Lobster',
+//        fontFamily: 'Lobster',
         fontSize: 64,
         paddingTop: 290,
         paddingBottom: 100
