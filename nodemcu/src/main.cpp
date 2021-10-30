@@ -1,15 +1,16 @@
 #define BLYNK_PRINT Serial
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <string.h>
 
 const char* wifiName = "Azkaban";
 const char* wifiPass = "voldemort";
 
 const char* mqtt_server = "139.59.11.198";
 
-const int  R_PIN  = 5;
-const int  G_PIN  = 4;
-const int  B_PIN  = 0;
+const int  R_PIN  = 4;
+const int  G_PIN  = 0;
+const int  B_PIN  = 5;
 
 
 WiFiClient espClient;
@@ -50,22 +51,30 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
-  
-  if(topic == 'red') {
+
+
+  if(strcmp(topic,"red") == 0) 
+  {
     payload[length] = '\0'; // Make payload a string by NULL terminating it.
-    int pwmVal = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
-    digitalWrite(R_PIN, pwnVal);
+    int payloadValue = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
+    Serial.print("Red With");
+    Serial.println(payloadValue);
+    digitalWrite(R_PIN, payloadValue);
   }
 
-  if(topic == 'green') {
+  if (strcmp(topic, "green") == 0) {
     payload[length] = '\0'; // Make payload a string by NULL terminating it.
-    int pwmVal = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
-    digitalWrite(G_PIN, pwnVal); }
+    int payloadValue = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
+    Serial.print("Green With");
+    Serial.println(payloadValue);
+    digitalWrite(G_PIN, payloadValue); }
 
-  if(topic == 'blue') {
+  if(strcmp(topic, "blue") == 0) {
     payload[length] = '\0'; // Make payload a string by NULL terminating it.
-    int pwmVal = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
-    digitalWrite(B_PIN, pwnVal);
+    int payloadValue = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
+    Serial.print("Blue With");
+    Serial.println(payloadValue);
+    digitalWrite(B_PIN, payloadValue);
   }
 
   // Switch on the LED if an 1 was received as first character
@@ -91,7 +100,9 @@ void reconnect() {
     // Attempt to connect
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
-      client.subscribe("color");
+      client.subscribe("red");
+      client.subscribe("green");
+      client.subscribe("blue");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());

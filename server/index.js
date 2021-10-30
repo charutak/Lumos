@@ -1,5 +1,5 @@
 var mqtt = require('mqtt')
-var client  = mqtt.connect('mqtt.com')
+var client  = mqtt.connect('http://139.59.11.198')
 
 const express = require('express')
 var app = express()
@@ -14,9 +14,9 @@ app.get('/', function(req, res) {
 })
 
 app.post('/sendColor', function (req, res) {
-   // client.publish('red', req.body.red);
-   // client.publish('blue', req.body.green);
-  //  client.publish('green', req.body.blue);
+    client.publish('red', String(req.body.red));
+    client.publish('blue', String(req.body.green));
+    client.publish('green', String(req.body.blue));
     console.log(req.body.red);
     console.log(req.body.blue);
     console.log(req.body.green);
