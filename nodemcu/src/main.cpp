@@ -1,188 +1,136 @@
 #define BLYNK_PRINT Serial
 #include <ESP8266WiFi.h>
-#include <BlynkSimpleEsp8266.h>
+#include <PubSubClient.h>
+#include <string.h>
 
-char auth[] = "_TvVqbGysyND1Wox68aT_scTR50YCl3W";
-char ssid[] = "hyrule";
-char pass[] = "adventuretime";
+const char* wifiName = "Azkaban";
+const char* wifiPass = "voldemort";
 
-// initialize constants
-int red = 0;
-int green = 0;
-int blue = 0;
+const char* mqtt_server = "139.59.11.198";
 
-const int REDPIN = 4;
-const int GREENPIN = 5;
-const int BLUEPIN = 0;
-
-#define ON 255
-#define OFF 0
-
-int onoff = ON; // variable for lamp's power button
-int rbow = OFF; // variable for mood buttons
+const int  R_PIN  = 4;
+const int  G_PIN  = 0;
+const int  B_PIN  = 5;
 
 
-/////////////////////////w///////////////////
+WiFiClient espClient;
+PubSubClient client(espClient);
+unsigned long lastMsg = 0;
+#define MSG_BUFFER_SIZE	(50)
+char msg[MSG_BUFFER_SIZE];
+int value = 0;
 
-// V0 - Power ON/OFF
-// V1 - Slider R
-// V2 - Slider G
-// V3 - Slider B
-// V4 - Mood Color 1
-// V5 - Mood Color 2
-// V6 - Mood Color 3
+void setup_wifi() {
 
-/////////////////////////////////////////////
+  delay(10);
+  // We start by connecting to a WiFi network
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(wifiName);
 
-void SetRGB(int r, int g, int b) {
-  red = r;
-  green = g;
-  blue = b;
-}
+  WiFi.begin(wifiName, wifiPass);
 
-void SetSliders() {
-    Blynk.virtualWrite(V1, 1023 - red); 
-    Blynk.virtualWrite(V2, 1023 - green);
-    Blynk.virtualWrite(V3, 1023 - blue);
-}
-
-void SetMood1() {
-  SetRGB(0,1023, 1023);
-  SetSliders();
-}
-
-void SetMood2() {
-  SetRGB(1023, 0, 1023);
-  SetSliders();
-}
-
-void SetMood3() {
-  SetRGB(1023, 1023, 0);
-  SetSliders();
-}
-
-void SetColorBlack() {
-  SetRGB(1023, 1023, 1023);  
-}
-
-void SetColorWhite() {
-  SetRGB(0, 0, 0);
-}
-
-
-BLYNK_WRITE(V0) { // V0 = power button control 
-  onoff = param.asInt(); 
-  if(onoff == LOW) { // want to turn lamp off 
-    Blynk.virtualWrite(V4,LOW); // turn off all other buttons if applicable
-    Blynk.virtualWrite(V5,LOW);
-    Blynk.virtualWrite(V6,LOW);
-
-    SetColorBlack();
-    SetSliders();
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
-  else { // turn lamps on
-    Blynk.virtualWrite(V4,LOW); // turn off all buttons if applicable
-    Blynk.virtualWrite(V5,LOW);
-    Blynk.virtualWrite(V6,LOW);
 
-    SetColorWhite();
-    SetSliders();
-  }
+  randomSeed(micros());
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
 }
 
-BLYNK_WRITE(V1) { // red slider was changed
-  if (onoff == HIGH) { // only change if lamp is on
-    red = 1023 - param.asInt(); 
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
   }
-  else { // if lamp is not on, change slider back to 0
-    red = 0;
-    Blynk.virtualWrite(V1,red);
+  Serial.println();
+
+
+  if(strcmp(topic,"red") == 0) 
+  {
+    payload[length] = '\0'; // Make payload a string by NULL terminating it.
+    int payloadValue = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
+    Serial.print("Red With");
+    Serial.println(payloadValue);
+    digitalWrite(R_PIN, payloadValue);
   }
+
+  if (strcmp(topic, "green") == 0) {
+    payload[length] = '\0'; // Make payload a string by NULL terminating it.
+    int payloadValue = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
+    Serial.print("Green With");
+    Serial.println(payloadValue);
+    digitalWrite(G_PIN, payloadValue); }
+
+  if(strcmp(topic, "blue") == 0) {
+    payload[length] = '\0'; // Make payload a string by NULL terminating it.
+    int payloadValue = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
+    Serial.print("Blue With");
+    Serial.println(payloadValue);
+    digitalWrite(B_PIN, payloadValue);
+  }
+
+  // Switch on the LED if an 1 was received as first character
+  if ((char)payload[0] == '1') {
+    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
+    // but actually the LED is on; this is because
+    // it is active low on the ESP-01)
+  } else {
+    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
+  }
+
+
+
 }
 
-BLYNK_WRITE(V2) { // green slider was changed 
-  if (onoff == HIGH) { 
-    green = 1023 - param.asInt();
-  }
-  else { 
-    green = 0;
-    Blynk.virtualWrite(V2,green);
-  }
-}
-
-BLYNK_WRITE(V3) { // blue slider was changed 
-  if (onoff == HIGH) { 
-    blue = 1023 - param.asInt();
-  }
-  else { 
-    blue = 0;
-    Blynk.virtualWrite(V3,blue);
-  }
-}
-
-BLYNK_WRITE(V4) { // mood 1
-  rbow = param.asInt(); 
-  if (onoff == HIGH) { 
-    if (rbow == HIGH) { 
-      Serial.print(rbow);
-      Blynk.virtualWrite(V5,OFF); 
-      Blynk.virtualWrite(V6,OFF);
-      SetMood1();
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    // Create a random client ID
+    String clientId = "ESP8266Client-";
+    clientId += String(random(0xffff), HEX);
+    // Attempt to connect
+    if (client.connect(clientId.c_str())) {
+      Serial.println("connected");
+      client.subscribe("red");
+      client.subscribe("green");
+      client.subscribe("blue");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
     }
-  }
-  else if (onoff == LOW) { 
-    Blynk.virtualWrite(V4,OFF);
-  }
-}
-
-BLYNK_WRITE(V5) 
-{
-  rbow = param.asInt(); 
-  if (onoff == HIGH) {
-    if (rbow == HIGH) {
-      Serial.print(rbow);
-      Blynk.virtualWrite(V4,OFF);
-      Blynk.virtualWrite(V6,OFF);
-      SetMood2();
-    }
-  }
-  else if (onoff == LOW) {
-    Blynk.virtualWrite(V5,OFF);
-  }
-}
-
-BLYNK_WRITE(V6) 
-{
-  rbow = param.asInt(); 
-  if (onoff == HIGH) {
-    if (rbow == HIGH) {
-      Serial.print(rbow);
-      Blynk.virtualWrite(V4,OFF);
-      Blynk.virtualWrite(V5,OFF);
-      SetMood3();
-    }
-  }
-  else if (onoff == LOW) {
-      Blynk.virtualWrite(V6,OFF);
   }
 }
 
 void setup() {
-  Serial.begin(9600); 
-  SetColorWhite();
-
-  pinMode(REDPIN, OUTPUT);
-  pinMode(GREENPIN, OUTPUT);
-  pinMode(BLUEPIN, OUTPUT);
-
-  Blynk.begin(auth, ssid, pass);
+  pinMode(BUILTIN_LED, OUTPUT);  
   
+  pinMode(R_PIN, OUTPUT);
+  pinMode(G_PIN, OUTPUT);
+  pinMode(B_PIN, OUTPUT);
+  
+  Serial.begin(9600);
+  setup_wifi();
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(callback);
 }
 
 void loop() {
-  Blynk.run(); 
-  analogWrite(REDPIN, red);
-  analogWrite(GREENPIN, green);
-  analogWrite(BLUEPIN, blue);  
+
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
 }
 
