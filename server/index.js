@@ -15,11 +15,11 @@ app.get('/', function(req, res) {
 
 app.post('/sendColor', function (req, res) {
     client.publish('red', String(req.body.red));
-    client.publish('blue', String(req.body.green));
-    client.publish('green', String(req.body.blue));
-    console.log(req.body.red);
-    console.log(req.body.blue);
-    console.log(req.body.green);
+    client.publish('blue', String(req.body.blue));
+    client.publish('green', String(req.body.green));
+    console.log("Red = " , req.body.red);
+    console.log("Green = ", req.body.green);
+    console.log("Blue = ", req.body.blue);
     res.send({
         "message" : "Color Recieved"
     })

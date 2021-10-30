@@ -9,8 +9,8 @@ const char* wifiPass = "voldemort";
 const char* mqtt_server = "139.59.11.198";
 
 const int  R_PIN  = 4;
-const int  G_PIN  = 0;
-const int  B_PIN  = 5;
+const int  G_PIN  = 5;
+const int  B_PIN  = 0;
 
 
 WiFiClient espClient;
@@ -55,26 +55,26 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   if(strcmp(topic,"red") == 0) 
   {
-    payload[length] = '\0'; // Make payload a string by NULL terminating it.
-    int payloadValue = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
-    Serial.print("Red With");
+    payload[length] = '\0';
+    int payloadValue = atoi((char *)payload); 
+    Serial.print("Red With ");
     Serial.println(payloadValue);
-    digitalWrite(R_PIN, payloadValue);
+    digitalWrite(R_PIN, 255 - payloadValue);
   }
 
   if (strcmp(topic, "green") == 0) {
-    payload[length] = '\0'; // Make payload a string by NULL terminating it.
-    int payloadValue = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
-    Serial.print("Green With");
+    payload[length] = '\0'; 
+    int payloadValue = atoi((char *)payload);  
+    Serial.print("Green With ");
     Serial.println(payloadValue);
-    digitalWrite(G_PIN, payloadValue); }
+    digitalWrite(G_PIN, 255 - payloadValue); }
 
   if(strcmp(topic, "blue") == 0) {
-    payload[length] = '\0'; // Make payload a string by NULL terminating it.
-    int payloadValue = atoi((char *)payload);  // Turn the LED off by making the voltage HIGH
-    Serial.print("Blue With");
+    payload[length] = '\0'; 
+    int payloadValue = atoi((char *)payload);  
+    Serial.print("Blue With ");
     Serial.println(payloadValue);
-    digitalWrite(B_PIN, payloadValue);
+    digitalWrite(B_PIN, 255 - payloadValue);
   }
 
   // Switch on the LED if an 1 was received as first character
