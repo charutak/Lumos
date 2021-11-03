@@ -6,15 +6,16 @@ export default class ServerAPI {
         return ApiUtils.getResource<string>(`/`);
     }
 
-    static postRGB = (): Promise<string> => {
+    static postRGB = (red, green, blue): Promise<string> => {
         const request = {
             uri: `/sendColor`,
             jsonObject: {
-                'red': 255,
-                'green': 0,
-                'blue': 0
+                'red': red.toString(),
+                'green': green.toString(),
+                'blue': blue.toString()
             }
         };
+        console.log("Server Command:", red, green, blue);
         return ApiUtils.postJson<string>(request);
     }
 }

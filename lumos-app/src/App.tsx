@@ -2,46 +2,37 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, Button} from 'react-native';
 import { useFonts } from 'expo-font';
 import { AppLoading, Font } from 'expo'
-import ServerAPI from './api/Server';
+import Main from './screens/Main'
+import Splash from './screens/Splash'
 
 export default class App extends React.Component {
-    /* private [fontsLoaded] = useFonts({
-     *     'Lobster': require('../assets/fonts/Lobster-Regular.ttf'),
-     * }); */
-    private handleClick = () => {
-        ServerAPI.postRGB();
-        console.log('pressed');
-    };
-    render() {
-        const image = require('../assets/img/flashlight_on.png');
-        return (
-            <View style={styles.container}>
-                <Text style={styles.title}>Lumos</Text>
-                <Image source={image} style={styles.flashlight} />
-                <Button title="boo" onPress={this.handleClick}/>
-            </View>
+    constructor()
+    {
+        super();
+        this.state = { isVisible : true }
+    }
+
+
+    private hideSplashScreen = () => {
+        this.setState({
+            isVisible : false
+        });
+    }
+
+    componentDidMount() {
+        var that = this;
+        setTimeout( function() {
+            that.hideSplashScreen();
+        }, 1000);
+    }
+
+    public render()
+    {
+        let splashScreen = <Splash />;
+        let mainScreen = <Main />;
+        return(
+            (this.state.isVisible === true) ? splashScreen : mainScreen
         );
     }
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      flexDirection:'column',
-      backgroundColor: '#272727',
-      alignItems: 'center',
-  },
-    title: {
-        color: '#FF9900',
-//        fontFamily: 'Lobster',
-        fontSize: 64,
-        paddingTop: 290,
-        paddingBottom: 100
-    },
-    flashlight: {
-        width: 100,
-        height: 100,
-    }
-});
 

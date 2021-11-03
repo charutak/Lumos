@@ -7075,7 +7075,7 @@ prompts@^2.0.1, prompts@^2.2.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.7, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -7150,10 +7150,22 @@ react-is@^16.12.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-i
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-css-vh-vw@^1.0.4:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-css-vh-vw/-/react-native-css-vh-vw-1.0.5.tgz#dfa8e2fde22fa6a36e43101c713f2dcd13a00cad"
+  integrity sha512-pY0gIB1xc1xLp3VH6mji7zHfiOc7BpFFCtOTpMeyjfoQ4CacmcCD6vTZuM2ReuK+oXdWrbx7CquTHxl44aHcBA==
+
 react-native-safe-area-context@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.2.0.tgz#06113c6b208f982d68ab5c3cebd199ca93db6941"
   integrity sha512-k2Nty4PwSnrg9HwrYeeE+EYqViYJoOFwEy9LxL5RIRfoqxAq/uQXNGwpUg2/u4gnKpBbEPa9eRh15KKMe/VHkA==
+
+react-native-slider-picker@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-slider-picker/-/react-native-slider-picker-1.1.4.tgz#e79741ba1d62d48dd338766aae62d0eb645efd5f"
+  integrity sha512-ln5qfFh0TSzqTfRgRKrZddO+l45KNZ3MYibWApdm7rkstJsTUN/uVWjQgXuU5fBGdYtOfCvk6s5XcV0R/kA4+A==
+  dependencies:
+    react-native-css-vh-vw "^1.0.4"
 
 react-native-web@~0.13.12:
   version "0.13.18"
@@ -8168,6 +8180,13 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
+
+toggle-switch-react-native@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/toggle-switch-react-native/-/toggle-switch-react-native-3.2.0.tgz#1bd1b3ba64e83ce4a04a772d279ea03243b2bf9c"
+  integrity sha512-53OEp6h4PMVaaeLJgvHq6dicUYL19SNVuB9Oi01IHKVhFw7i6fio+6Q2xlliPGhS0/eyBuA8KARl9puLzlLj8Q==
+  dependencies:
+    prop-types "^15.5.7"
 
 toidentifier@1.0.0:
   version "1.0.0"

@@ -45,13 +45,11 @@ function makeApiCall<T>(
     headerMap?: Map<string, string>,
     body?: string | FormData, contentType?: string
 ): Promise<T> {
-    console.log('uri' + uri);
     const headers = mapToHttpHeaders(headerMap);
     if (contentType) {
         headers.set('Content-Type', contentType);
     }
     const url = ApiUtils.apiBase + uri.replace(/^\/+/, '');
-    console.log('url' + url);
     const rawApiFunc = () => fetch(url, {
         mode: 'cors',
         method,
@@ -146,7 +144,7 @@ export default class ApiUtils {
      * @return {Promise<T>}
      */
     static getResource<T>(request: ApiGetCall): Promise<T> {
-        console.log('get resource' + request.uri);
+        console.log('get resource ' + request.uri);
         if (typeof request === 'string') {
             request = {uri: request};
         }
